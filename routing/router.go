@@ -14,7 +14,7 @@ var router *echo.Echo
 func Router() *echo.Echo { return router }
 
 //InitRouter will initialize the router
-func InitRouter(debugMode bool, responseDelay time.Duration, sentryClient *raven.Client) {
+func InitRouter(version, gitSha1 string, debugMode bool, responseDelay time.Duration, sentryClient *raven.Client) {
 	router = echo.New()
 	router.Debug = debugMode
 
@@ -31,5 +31,5 @@ func InitRouter(debugMode bool, responseDelay time.Duration, sentryClient *raven
 		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
 	}))
 
-	router.Use(MiddlewareResponseVersion())
+	router.Use(MiddlewareResponseVersion(version, gitSha1))
 }
