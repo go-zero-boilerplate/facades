@@ -4,6 +4,7 @@ import (
 	"os"
 
 	apex "github.com/francoishill/log"
+	"github.com/francoishill/log/handlers/multi"
 
 	"github.com/go-zero-boilerplate/facades/logging/text_handler"
 )
@@ -43,12 +44,16 @@ type Logger interface {
 }
 
 //InitLogger initializes the singleton logger instance
-func InitLogger() {
+func InitLogger(additionalHandlers []apex.Handler) {
 	level := apex.DebugLevel
 	loggerFields := apex.Fields{}
 	apexEntry := apex.WithFields(loggerFields)
 
-	logHandler := text_handler.New(os.Stdout, os.Stderr, text_handler.DefaultTimeStampFormat, text_handler.DefaultMessageWidth)
+	logHandlers := []apex.Handler{}
+
+	logHandlers = append(logHandlers, text_handler.New(os.Stdout, os.Stderr, text_handler.DefaultTimeStampFormat, text_handler.DefaultMessageWidth))
+	logHandlers = append(logHandlers, additionalHandlers...)
+
 	exitOnEmergency := true
-	logger = NewApexLogger(level, logHandler, apexEntry, exitOnEmergency)
+	logger = NewApexLogger(level, multi.New(logHandlers...), apexEntry, exitOnEmergency)
 }
