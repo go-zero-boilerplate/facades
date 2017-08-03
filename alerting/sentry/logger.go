@@ -28,7 +28,9 @@ var severityMapping = [...]raven.Severity{
 }
 
 func (l *logger) HandleLog(e *apex.Entry) error {
+	var err error
 	var stack interface{}
+
 	tags := map[string]string{}
 	for key, val := range e.Fields {
 		if strings.EqualFold(key, "stack") {
@@ -36,14 +38,29 @@ func (l *logger) HandleLog(e *apex.Entry) error {
 			continue //stack added below
 		}
 
+		if strings.EqualFold(key, "error") {
+			if tmpErr, ok := val.(error); ok {
+				err = tmpErr
+			}
+		}
+
 		tags[key] = fmt.Sprintf("%+v", val)
 	}
 
-	packet := raven.NewPacket(e.Message)
+	msg := e.Message
+	if err != nil {
+		msg += ": " + err.Error()
+	}
+
+	packet := raven.NewPacket(msg)
 	packet.Init("") //will setup default fields like project, culprit, etc
 	packet.Level = severityMapping[e.Level]
+
 	if stack != nil {
 		packet.Extra["stack"] = stack
+	}
+	if err != nil {
+		packet.Extra["full-error"] = fmt.Sprintf("%+v", err)
 	}
 
 	go l.client.Capture(packet, tags)
