@@ -20,11 +20,14 @@ type logger struct {
 }
 
 var severityMapping = [...]raven.Severity{
-	apex.DebugLevel: raven.DEBUG,
-	apex.InfoLevel:  raven.INFO,
-	apex.WarnLevel:  raven.WARNING,
-	apex.ErrorLevel: raven.ERROR,
-	apex.FatalLevel: raven.FATAL,
+	apex.DebugLevel:     raven.DEBUG,
+	apex.InfoLevel:      raven.INFO,
+	apex.NoticeLevel:    raven.WARNING,
+	apex.WarnLevel:      raven.WARNING,
+	apex.ErrorLevel:     raven.ERROR,
+	apex.CriticalLevel:  raven.FATAL,
+	apex.AlertLevel:     raven.FATAL,
+	apex.EmergencyLevel: raven.FATAL,
 }
 
 func (l *logger) HandleLog(e *apex.Entry) error {

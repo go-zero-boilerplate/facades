@@ -40,20 +40,26 @@ func New(infoWriter, errorWriter io.Writer, timeStampFormat string, messageWidth
 
 // Colors mapping.
 var Colors = [...]*color.Color{
-	apex.DebugLevel: color.New(color.FgWhite),
-	apex.InfoLevel:  color.New(color.FgBlue),
-	apex.WarnLevel:  color.New(color.FgYellow),
-	apex.ErrorLevel: color.New(color.FgRed),
-	apex.FatalLevel: color.New(color.FgHiRed),
+	apex.DebugLevel:     color.New(color.FgWhite),
+	apex.InfoLevel:      color.New(color.FgBlue),
+	apex.NoticeLevel:    color.New(color.FgYellow),
+	apex.WarnLevel:      color.New(color.FgYellow),
+	apex.ErrorLevel:     color.New(color.FgRed),
+	apex.CriticalLevel:  color.New(color.FgHiRed),
+	apex.AlertLevel:     color.New(color.FgHiRed),
+	apex.EmergencyLevel: color.New(color.FgHiRed),
 }
 
 // Strings mapping.
 var Strings = [...]string{
-	apex.DebugLevel: "DEBUG",
-	apex.InfoLevel:  "INFO",
-	apex.WarnLevel:  "WARN",
-	apex.ErrorLevel: "ERROR",
-	apex.FatalLevel: "FATAL",
+	apex.DebugLevel:     "DEBUG",
+	apex.InfoLevel:      "INFO",
+	apex.NoticeLevel:    "NOTICE",
+	apex.WarnLevel:      "WARN",
+	apex.ErrorLevel:     "ERROR",
+	apex.CriticalLevel:  "CRIT",
+	apex.AlertLevel:     "ALERT",
+	apex.EmergencyLevel: "EMER",
 }
 
 // field used for sorting.
