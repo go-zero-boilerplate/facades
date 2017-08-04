@@ -50,12 +50,7 @@ func (l *logger) HandleLog(e *apex.Entry) error {
 		tags[key] = fmt.Sprintf("%+v", val)
 	}
 
-	msg := e.Message
-	if err != nil {
-		msg += ": " + err.Error()
-	}
-
-	packet := raven.NewPacket(msg)
+	packet := raven.NewPacket(e.Message)
 	packet.Init("") //will setup default fields like project, culprit, etc
 	packet.Level = severityMapping[e.Level]
 
