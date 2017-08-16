@@ -119,7 +119,7 @@ func (h *Handler) HandleLog(e *apex.Entry) error {
 	if len(fields) > 0 {
 		fieldKeyVals := []string{}
 		for _, f := range fields {
-			fieldKeyVals = append(fieldKeyVals, fmt.Sprintf("%s=%v", colorFunc("%s", f.Name), f.Value))
+			fieldKeyVals = append(fieldKeyVals, fmt.Sprintf("%s=%+v", colorFunc("%s", f.Name), f.Value))
 		}
 		fmt.Fprintf(writer, " %s", strings.Join(fieldKeyVals, " "))
 	}
