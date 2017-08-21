@@ -2,7 +2,6 @@ package sentry
 
 import (
 	"fmt"
-	"strings"
 
 	apex "github.com/francoishill/log"
 	"github.com/francoishill/log/handlers/level"
@@ -31,34 +30,14 @@ var severityMapping = [...]raven.Severity{
 }
 
 func (l *logger) HandleLog(e *apex.Entry) error {
-	var err error
-	var stack interface{}
-
-	tags := map[string]string{}
-	for key, val := range e.Fields {
-		if strings.EqualFold(key, "stack") {
-			stack = val
-			continue //stack added below
-		}
-
-		if strings.EqualFold(key, "error") {
-			if tmpErr, ok := val.(error); ok {
-				err = tmpErr
-			}
-		}
-
-		tags[key] = fmt.Sprintf("%+v", val)
-	}
-
 	packet := raven.NewPacket(e.Message)
 	packet.Init("") //will setup default fields like project, culprit, etc
 	packet.Level = severityMapping[e.Level]
 
-	if stack != nil {
-		packet.Extra["stack"] = stack
-	}
-	if err != nil {
-		packet.Extra["full-error"] = fmt.Sprintf("%+v", err)
+	tags := map[string]string{}
+	for key, val := range e.Fields {
+		tags[key] = fmt.Sprintf("%v", val)
+		packet.Extra["full-"+key] = fmt.Sprintf("%+v", val)
 	}
 
 	go l.client.Capture(packet, tags)
