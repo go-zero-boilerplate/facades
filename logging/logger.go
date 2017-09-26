@@ -44,8 +44,7 @@ type Logger interface {
 }
 
 //InitLogger initializes the singleton logger instance
-func InitLogger(additionalHandlers []apex.Handler) {
-	level := apex.DebugLevel
+func InitLogger(level apex.Level, additionalHandlers []apex.Handler) {
 	loggerFields := apex.Fields{}
 	apexEntry := apex.WithFields(loggerFields)
 
